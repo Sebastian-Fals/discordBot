@@ -6,7 +6,8 @@ const {
   Partials,
   Collection,
 } = require("discord.js");
-const CONFIG = require("../config.json");
+const dotenv = require("dotenv");
+dotenv.config();
 
 const client = new Client({
   intents: [
@@ -83,4 +84,4 @@ for (const file of eventFiles) {
   }
 }
 
-client.login(CONFIG.token);
+client.login(process.env.token);
