@@ -2,9 +2,9 @@ const { SlashCommandBuilder } = require("discord.js");
 
 module.exports = {
   data: new SlashCommandBuilder()
-    .setName("santry")
-    .setDescription("Santry es gay certificado"),
+    .setName("Santry")
+    .setDescription("Easter egg de santry"),
   async execute(interaction) {
-    await interaction.reply("Santry es gay certificado");
+    await interaction.reply("@santryx_ es gay certificado");
   },
 };
