@@ -6,6 +6,9 @@ const {
   Partials,
   Collection,
 } = require("discord.js");
+const distube = require("distube");
+const { YouTubePlugin } = require("@distube/youtube");
+const { SpotifyPlugin } = require("@distube/spotify");
 const dotenv = require("dotenv");
 dotenv.config();
 
@@ -43,6 +46,12 @@ const client = new Client({
     Partials.ThreadMember,
     Partials.User,
   ],
+});
+client.distube = new distube.DisTube(client, {
+  emitNewSongOnly: true,
+  emitAddSongWhenCreatingQueue: false,
+  emitAddListWhenCreatingQueue: false,
+  plugins: [new YouTubePlugin(), new SpotifyPlugin()],
 });
 
 client.commands = new Collection();
