@@ -1,16 +1,20 @@
-const fs = require("node:fs");
-const path = require("node:path");
-const {
-  Client,
-  GatewayIntentBits,
-  Partials,
-  Collection,
-} = require("discord.js");
-const distube = require("distube");
-const { YouTubePlugin } = require("@distube/youtube");
-const { SpotifyPlugin } = require("@distube/spotify");
-const dotenv = require("dotenv");
-dotenv.config();
+import { readdirSync, existsSync } from "node:fs";
+import { join, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
+import { Client, GatewayIntentBits, Partials, Collection } from "discord.js";
+import { DisTube } from "distube";
+import { FilePlugin } from "@distube/file";
+import { YouTubePlugin } from "@distube/youtube";
+import { SpotifyPlugin } from "@distube/spotify";
+import { config } from "dotenv";
+import { SoundCloudPlugin } from "@distube/soundcloud";
+import { DeezerPlugin } from "@distube/deezer";
+import { DirectLinkPlugin } from "@distube/direct-link";
+config();
+
+// Emular __dirname en ES Modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const client = new Client({
   intents: [
@@ -47,45 +51,54 @@ const client = new Client({
     Partials.User,
   ],
 });
-client.distube = new distube.DisTube(client, {
+
+client.distube = new DisTube(client, {
   emitNewSongOnly: true,
   emitAddSongWhenCreatingQueue: false,
   emitAddListWhenCreatingQueue: false,
-  plugins: [new YouTubePlugin(), new SpotifyPlugin()],
+  plugins: [
+    new YouTubePlugin(),
+    new SoundCloudPlugin(),
+    new SpotifyPlugin(),
+    new DeezerPlugin(),
+    new DirectLinkPlugin(),
+    new FilePlugin(),
+  ],
 });
 
 client.commands = new Collection();
 
-const foldersPath = path.join(__dirname, "commands");
-const commandFolders = fs.readdirSync(foldersPath);
+// Cargar comandos
+const foldersPath = join(__dirname, "commands");
+const commandFolders = readdirSync(foldersPath);
 
 for (const folder of commandFolders) {
-  const commandsPath = path.join(foldersPath, folder);
-  const commandFiles = fs
-    .readdirSync(commandsPath)
-    .filter((file) => file.endsWith(".js"));
+  const commandsPath = join(foldersPath, folder);
+  const commandFiles = readdirSync(commandsPath).filter((file) =>
+    file.endsWith(".js")
+  );
   for (const file of commandFiles) {
-    const filePath = path.join(commandsPath, file);
-    const command = require(filePath);
-    // Set a new item in the Collection with the key as the command name and the value as the exported module
+    const filePath = join(commandsPath, file);
+    const { default: command } = await import(`file://${filePath}`);
     if ("data" in command && "execute" in command) {
       client.commands.set(command.data.name, command);
     } else {
       console.log(
-        `[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`
+        `[WARNING] El comando en ${filePath} no tiene "data" o "execute".`
       );
     }
   }
 }
 
-const eventsPath = path.join(__dirname, "events");
-const eventFiles = fs
-  .readdirSync(eventsPath)
-  .filter((file) => file.endsWith(".js"));
+// Cargar eventos
+const eventsPath = join(__dirname, "events");
+const eventFiles = readdirSync(eventsPath).filter((file) =>
+  file.endsWith(".js")
+);
 
 for (const file of eventFiles) {
-  const filePath = path.join(eventsPath, file);
-  const event = require(filePath);
+  const filePath = join(eventsPath, file);
+  const { default: event } = await import(`file://${filePath}`);
   if (event.once) {
     client.once(event.name, (...args) => event.execute(...args));
   } else {
@@ -93,16 +106,16 @@ for (const file of eventFiles) {
   }
 }
 
-// Cargar eventos de DisTube desde /events/distube
-const distubeEventsPath = path.join(__dirname, "events", "distube");
-if (fs.existsSync(distubeEventsPath)) {
-  const distubeEventFiles = fs
-    .readdirSync(distubeEventsPath)
-    .filter((file) => file.endsWith(".js"));
+// Eventos de distube
+const distubeEventsPath = join(__dirname, "events", "distube");
+if (existsSync(distubeEventsPath)) {
+  const distubeEventFiles = readdirSync(distubeEventsPath).filter((file) =>
+    file.endsWith(".js")
+  );
 
   for (const file of distubeEventFiles) {
-    const filePath = path.join(distubeEventsPath, file);
-    const event = require(filePath);
+    const filePath = join(distubeEventsPath, file);
+    const { default: event } = await import(`file://${filePath}`);
     client.distube.on(event.name, (...args) => event.execute(...args));
   }
 }

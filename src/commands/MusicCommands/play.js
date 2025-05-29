@@ -1,10 +1,6 @@
-const {
-  SlashCommandBuilder,
-  EmbedBuilder,
-  MessageFlags,
-} = require("discord.js");
+import { SlashCommandBuilder, EmbedBuilder, MessageFlags } from "discord.js";
 
-module.exports = {
+export default {
   data: new SlashCommandBuilder()
     .setName("reproducir")
     .setDescription("Reproduce una canción en el canal de voz")
@@ -45,6 +41,27 @@ module.exports = {
         member: interaction.member,
         metadata: { interaction },
       })
+      .then(() => {
+        channel.send({
+          content: `<@${interaction.user.id}>`,
+          embeds: [
+            new EmbedBuilder()
+              .setColor(0x5865f2)
+              .setTitle("Reproduciendo canción")
+              .addFields({
+                name: "Solicitada por",
+                value: interaction.user.displayName,
+                inline: true,
+              })
+              .setDescription(
+                `Reproduciendo: \`${input}\`${
+                  skip ? " (Saltando la canción actual)" : ""
+                }${position ? ` en la posición ${position}` : ""}`
+              ),
+          ],
+        });
+        interaction.editReply("Reproduciendo canción...");
+      })
       .catch((e) => {
         console.error(e);
         channel.send({
@@ -60,23 +77,5 @@ module.exports = {
           "Ocurrió un error al intentar reproducir la canción."
         );
       });
-    channel.send({
-      embeds: [
-        new EmbedBuilder()
-          .setColor(0x5865f2)
-          .setTitle("Reproduciendo canción")
-          .addFields({
-            name: "Solicitada por",
-            value: interaction.user.displayName,
-            inline: true,
-          })
-          .setDescription(
-            `Reproduciendo: \`${input}\`${
-              skip ? " (Saltando la canción actual)" : ""
-            }${position ? ` en la posición ${position}` : ""}`
-          ),
-      ],
-    });
-    interaction.editReply("Reproduciendo canción...");
   },
 };

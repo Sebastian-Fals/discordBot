@@ -1,6 +1,6 @@
-const { Events } = require("distube");
+import { Events } from "distube";
 
-module.exports = {
+export default {
   name: Events.EMPTY,
   async execute(queue) {
     try {

@@ -1,8 +1,8 @@
-const { SlashCommandBuilder, userMention } = require("discord.js");
+import { SlashCommandBuilder, userMention } from "discord.js";
 
 const mentionId = "1099786341321035917";
 
-module.exports = {
+export default {
   data: new SlashCommandBuilder()
     .setName("santry")
     .setDescription("Easter egg de santry"),
