@@ -93,4 +93,18 @@ for (const file of eventFiles) {
   }
 }
 
+// Cargar eventos de DisTube desde /events/distube
+const distubeEventsPath = path.join(__dirname, "events", "distube");
+if (fs.existsSync(distubeEventsPath)) {
+  const distubeEventFiles = fs
+    .readdirSync(distubeEventsPath)
+    .filter((file) => file.endsWith(".js"));
+
+  for (const file of distubeEventFiles) {
+    const filePath = path.join(distubeEventsPath, file);
+    const event = require(filePath);
+    client.distube.on(event.name, (...args) => event.execute(...args));
+  }
+}
+
 client.login(process.env.token);

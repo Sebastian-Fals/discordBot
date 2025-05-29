@@ -11,6 +11,7 @@ module.exports = {
         content: "La reproducción ha sido detenida.",
         flags: MessageFlags.Ephemeral,
       });
+      await interaction.client.distube.voices.leave(interaction.guild.id);
     } catch (e) {
       console.error(e);
       await interaction.reply({
