@@ -3,13 +3,9 @@ import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { Client, GatewayIntentBits, Partials, Collection } from "discord.js";
 import { DisTube } from "distube";
-import { FilePlugin } from "@distube/file";
 import { YouTubePlugin } from "@distube/youtube";
 import { SpotifyPlugin } from "@distube/spotify";
 import { config } from "dotenv";
-import { SoundCloudPlugin } from "@distube/soundcloud";
-import { DeezerPlugin } from "@distube/deezer";
-import { DirectLinkPlugin } from "@distube/direct-link";
 config();
 
 // Emular __dirname en ES Modules
@@ -56,14 +52,7 @@ client.distube = new DisTube(client, {
   emitNewSongOnly: true,
   emitAddSongWhenCreatingQueue: false,
   emitAddListWhenCreatingQueue: false,
-  plugins: [
-    new YouTubePlugin(),
-    new SoundCloudPlugin(),
-    new SpotifyPlugin(),
-    new DeezerPlugin(),
-    new DirectLinkPlugin(),
-    new FilePlugin(),
-  ],
+  plugins: [new YouTubePlugin() /*new SpotifyPlugin()*/],
 });
 
 client.commands = new Collection();

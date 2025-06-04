@@ -2,6 +2,7 @@ import { REST, Routes } from "discord.js";
 import dotenv from "dotenv";
 import fs from "node:fs";
 import path from "node:path";
+import { pathToFileURL } from "node:url";
 import { fileURLToPath } from "url";
 
 // Setup __dirname for ES modules
@@ -24,8 +25,10 @@ for (const folder of commandFolders) {
   // Grab the SlashCommandBuilder#toJSON() output of each command's data for deployment
   for (const file of commandFiles) {
     const filePath = path.join(commandsPath, file);
-    const command = await import(filePath);
-    if ("data" in command && "execute" in command) {
+    const commandModule = await import(pathToFileURL(filePath).href);
+    const command = commandModule.default;
+
+    if (command && "data" in command && "execute" in command) {
       commands.push(command.data.toJSON());
     } else {
       console.log(
