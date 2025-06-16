@@ -19,7 +19,7 @@
     "@distube/file": "^1.0.1",
     "@distube/spotify": "^2.0.2",
     "@distube/youtube": "^1.0.4",
-    "@distube/ytdl-core": "^4.16.11",
+    "@distube/ytdl-core": "^4.16.12",
     "@distube/ytpl": "^1.2.3",
     "discord.js": "^14.19.3",
     "distube": "^5.0.7",
