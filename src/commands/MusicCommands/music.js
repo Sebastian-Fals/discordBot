@@ -63,7 +63,7 @@ export default {
   async execute(interaction) {
     await interaction.deferReply({ flags: MessageFlags.Ephemeral });
     const subcommand = interaction.options.getSubcommand();
-    const channel = interaction.guild.channels.cache.get("1377088834512097340"); // Canal 'musica'
+    const channel = interaction.guild.channels.cache.get("1406101212226519211"); // Canal 'musica'
 
     switch (subcommand) {
       case "reproducir": {

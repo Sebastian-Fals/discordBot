@@ -1,6 +1,6 @@
 import { SlashCommandBuilder, userMention } from "discord.js";
 
-const mentionId = "1099786341321035917";
+const mentionId = "409487890557698070";
 
 export default {
   data: new SlashCommandBuilder()
