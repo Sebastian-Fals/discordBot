@@ -1,6 +1,6 @@
 [phases.setup]
 aptPkgs = ["ffmpeg", "python3", "make", "g++"]
-nixPkgs = ["nodejs-20"]
+nixPkgs = ["nodejs_20"]
 
 [phases.build]
 cmds = ["npm install"]
