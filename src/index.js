@@ -6,6 +6,7 @@ import { DisTube } from "distube";
 import { YouTubePlugin } from "@distube/youtube";
 import { SpotifyPlugin } from "@distube/spotify";
 import { config } from "dotenv";
+import { ytCookies } from "./ytCookies.js";
 config();
 
 // Emular __dirname en ES Modules
@@ -52,7 +53,11 @@ client.distube = new DisTube(client, {
   emitNewSongOnly: true,
   emitAddSongWhenCreatingQueue: false,
   emitAddListWhenCreatingQueue: false,
-  plugins: [new YouTubePlugin() /*new SpotifyPlugin()*/],
+  plugins: [
+    new YouTubePlugin({
+      ytdlOptions: { cookies: ytCookies },
+    }) /*new SpotifyPlugin()*/,
+  ],
 });
 
 client.commands = new Collection();

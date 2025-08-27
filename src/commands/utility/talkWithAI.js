@@ -26,7 +26,7 @@ export default {
     // Configurar el cliente de OpenAI con la clave de API y el endpoint personalizado
     const openAiModel = new OpenAI({
       apiKey: process.env.grokKey,
-      baseURL: "https://api.x.ai/v1",
+      baseURL: "https://api.x.ai/v1" /*"https://api.deepseek.com"*/,
     });
 
     // Inicia el proceso de respuesta a discord
