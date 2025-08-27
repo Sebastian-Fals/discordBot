@@ -55,7 +55,7 @@ client.distube = new DisTube(client, {
   emitAddListWhenCreatingQueue: false,
   plugins: [
     new YouTubePlugin({
-      ytdlOptions: { cookies: ytCookies },
+      cookies: ytCookies,
     }) /*new SpotifyPlugin()*/,
   ],
 });
